@@ -1,0 +1,85 @@
+.titleBold {
+	text-align: right;
+	font-weight:bold;
+	font-size: 32;
+}
+.titleText {
+	text-align: right;
+	font-size: 24;
+}
+.directions {
+	text-align: center;
+}
+.directionsWarning {
+	color:#950000;
+	font-weight:bold;
+	text-align: center;
+}
+.baseDescription {
+	font-family: Lucida Console;
+	font-size: 14;
+}
+.myQuestionLong {
+	font-size: 14;
+}
+.nonPharmOnlyHeader {
+	font-family: Arial Narrow;
+	color:#336666;
+	font-size: 20;
+}
+.advice {
+	font-family: Arial Narrow;
+	font-size: 20;
+	margin-left: 15;
+	margin-right: 70;
+}
+.adviceTitle {
+	color:#003366;
+	font-size: 24;
+	font-weight:bold;
+}
+.adviceText {
+	text-indent: 16;
+	font-size: 20;
+}
+.adviceList {
+	font-size: 16;
+}
+.label {
+	margin-left: 10;
+	margin-right: 70;
+ 	font-family: Arial Narrow 16;
+	font-size: 18; 	
+}
+.labelsmall {
+ 	font-family: Arial Narrow 16;
+	font-size: 16;
+}
+.labelactives {
+  font-family: Lucida Console;
+  font-size: 13;
+}
+.bulletA {
+	font-family: Marlett;
+}
+.labeltitle {
+	font-family: Arial Narrow Bold;
+}
+.labeltext {
+	margin-left: 10;
+}
+.labellist {
+	margin-left: 0;
+}
+.tabA {
+	color:#00CC00;
+	font-weight:bold;
+}
+.tabB {
+	color:#0000FF;
+	font-weight:bold;
+}
+.tabC {
+	color:#FF0000;
+	font-weight:bold;
+}
