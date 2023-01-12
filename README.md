@@ -8,7 +8,7 @@
   <h3 align="center">Informing Consumers on their Over-The-Counter Options</h3>
 
   <p align="center"> 
-    <a href="">View Demo</a>
+    <a href="https://youtu.be/XC9IIhvAeLU">View Demo</a>
     ·
     <a href="https://github.com/feliceforgione/otcGuide/issues">Report Bug</a>
     ·
