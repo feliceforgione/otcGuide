@@ -21,7 +21,7 @@
 ## About The Project
 
 <img src="images/otcGuideScreenshot.jpg" alt="screenshot" >
-<br><br>
+<br>
 
 ### Aids the consumer in choosing appropriate over-the-counter options. With the demands on pharmacists increasing and more stores selling over-the-counter products without a pharmacist on site, consumers are left on their own to choose from the growing number of over-the-counter selections.
 
@@ -32,6 +32,7 @@
 [PHP](https://www.php.net/)  
 [MySQL](https://www.mysql.com/)  
 [ActionScript](https://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/index.html)  
+[JavaScript]()  
 [Apache](https://www.apache.org/)
 
 <!-- ROADMAP -->
