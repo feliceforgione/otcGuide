@@ -9,3 +9,14 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model disease_class {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique @db.VarChar(255)
+  aliasname   String? @db.VarChar(100)
+  description String? @db.VarChar(255)
+  buttonimage String? @db.VarChar(255)
+  order       Int?    @db.TinyInt
+  show        Boolean @default(false)
+  disable     Boolean @default(false)
+}
