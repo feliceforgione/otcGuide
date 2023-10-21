@@ -14,6 +14,7 @@ import { createDiseaseClassSchema } from "@/app/validationSchemas";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import ErrorMessage from "@/app/components/ErrorMessage";
+import Spinner from "@/app/components/spinner";
 
 type Form = z.infer<typeof createDiseaseClassSchema>;
 
@@ -27,15 +28,18 @@ function NewDiseaseClass() {
     resolver: zodResolver(createDiseaseClassSchema),
   });
   const [error, setError] = useState("");
+  const [isSubmitting, setSubmitting] = useState(false);
 
   async function handleFormSubmit(data: Form) {
     try {
+      setSubmitting(true);
       await axios.post("/api/disease-classes", {
         ...data,
         order: Number(data.order),
       });
       router.push("/admin/disease-classes");
     } catch (error) {
+      setSubmitting(false);
       setError("An unexpected error has occured");
     }
   }
@@ -87,8 +91,9 @@ function NewDiseaseClass() {
 
         <div>
           <TextField.Root>
-            <input
+            <TextField.Input
               type="number"
+              placeholder="Order"
               {...register("order", {
                 valueAsNumber: true,
               })}
@@ -98,7 +103,9 @@ function NewDiseaseClass() {
           <ErrorMessage>{errors.order?.message}</ErrorMessage>
         </div>
 
-        <Button>Submit New Disease Class</Button>
+        <Button disabled={isSubmitting}>
+          Submit New Disease Class {isSubmitting && <Spinner />}
+        </Button>
       </form>
     </div>
   );
