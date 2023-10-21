@@ -1,19 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/prisma/client";
-import { z } from "zod";
-
-const createDiseaseClassSchema = z.object({
-  name: z.string().min(1, "Name is required").max(255),
-  aliasname: z.string().min(1).max(255).nullable(),
-  description: z.string().min(1).max(255).nullable(),
-  buttonimage: z.string().min(1).max(255).nullable(),
-  order: z.number().int().nullable(),
-});
+import { createDiseaseClassSchema } from "@/app/validationSchemas";
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
   const validation = createDiseaseClassSchema.safeParse(body);
-  console.log(validation);
+
   if (!validation.success)
     return NextResponse.json(validation.error.format(), { status: 400 });
 
