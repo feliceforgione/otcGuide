@@ -7,7 +7,7 @@ function DiseaseClasses() {
     <div>
       <h1>Disease Classes</h1>
       <Button>
-        <Link href="/admin/disease-class/new/">Add New Disease Class</Link>
+        <Link href="/admin/disease-classes/new/">Add New Disease Class</Link>
       </Button>
     </div>
   );

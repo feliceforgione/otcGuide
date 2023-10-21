@@ -3,7 +3,7 @@ import prisma from "@/prisma/client";
 import { z } from "zod";
 
 const createDiseaseClassSchema = z.object({
-  name: z.string().min(1).max(255),
+  name: z.string().min(1, "Name is required").max(255),
   aliasname: z.string().min(1).max(255).nullable(),
   description: z.string().min(1).max(255).nullable(),
   buttonimage: z.string().min(1).max(255).nullable(),
@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
   const validation = createDiseaseClassSchema.safeParse(body);
   console.log(validation);
   if (!validation.success)
-    return NextResponse.json(validation.error.errors, { status: 400 });
+    return NextResponse.json(validation.error.format(), { status: 400 });
 
   const newDiseaseClass = await prisma.disease_class.create({
     data: {
