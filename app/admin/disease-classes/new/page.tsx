@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import {
   Button,
   Callout,
@@ -7,21 +8,24 @@ import {
   TextField,
 } from "@radix-ui/themes";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createDiseaseClassSchema } from "@/app/validationSchemas";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import ErrorMessage from "@/app/components/ErrorMessage";
 
-interface Form {
-  name: string;
-  aliasname: string;
-  description: string;
-  buttonimage: string;
-  order: number;
-}
+type Form = z.infer<typeof createDiseaseClassSchema>;
 
 function NewDiseaseClass() {
   const router = useRouter();
-  const { register, handleSubmit } = useForm<Form>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Form>({
+    resolver: zodResolver(createDiseaseClassSchema),
+  });
   const [error, setError] = useState("");
 
   async function handleFormSubmit(data: Form) {
@@ -51,22 +55,49 @@ function NewDiseaseClass() {
             <Callout.Text>{error}</Callout.Text>
           </Callout.Root>
         )}
-        <TextField.Root>
-          <TextField.Input placeholder="Name" {...register("name")} />
-        </TextField.Root>
-        <TextField.Root>
-          <TextField.Input placeholder="Alias" {...register("aliasname")} />
-        </TextField.Root>
-        <TextArea placeholder="Description" {...register("description")} />
-        <TextField.Root>
-          <TextField.Input
-            placeholder="Image Link"
-            {...register("buttonimage")}
-          />
-        </TextField.Root>
-        <TextField.Root>
-          <TextField.Input placeholder="Order" {...register("order")} />
-        </TextField.Root>
+        <div>
+          <TextField.Root>
+            <TextField.Input placeholder="Name" {...register("name")} />
+          </TextField.Root>
+          <ErrorMessage>{errors.name?.message}</ErrorMessage>
+        </div>
+
+        <div>
+          <TextField.Root>
+            <TextField.Input placeholder="Alias" {...register("aliasname")} />
+          </TextField.Root>
+          <ErrorMessage>{errors.aliasname?.message}</ErrorMessage>
+        </div>
+
+        <div>
+          <TextArea placeholder="Description" {...register("description")} />
+
+          <ErrorMessage>{errors.description?.message}</ErrorMessage>
+        </div>
+
+        <div>
+          <TextField.Root>
+            <TextField.Input
+              placeholder="Image Link"
+              {...register("buttonimage")}
+            />
+          </TextField.Root>
+          <ErrorMessage>{errors.buttonimage?.message}</ErrorMessage>
+        </div>
+
+        <div>
+          <TextField.Root>
+            <input
+              type="number"
+              {...register("order", {
+                valueAsNumber: true,
+              })}
+              className="border border-gray-400 "
+            />
+          </TextField.Root>
+          <ErrorMessage>{errors.order?.message}</ErrorMessage>
+        </div>
+
         <Button>Submit New Disease Class</Button>
       </form>
     </div>
