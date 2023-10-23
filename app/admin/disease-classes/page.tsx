@@ -1,9 +1,9 @@
 import React from "react";
 import prisma from "@/prisma/client";
-import { Button, Heading, Table } from "@radix-ui/themes";
-import Link from "next/link";
+import { Table } from "@radix-ui/themes";
 import delay from "delay";
 import DiseaseClassesNavbar from "./navbar";
+import Link from "@/app/components/Link";
 
 async function DiseaseClasses() {
   const diseaseClasses = await prisma.disease_class.findMany();
