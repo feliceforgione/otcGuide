@@ -33,7 +33,11 @@ async function DiseaseClasses() {
         <Table.Body>
           {diseaseClasses.map((disease) => (
             <Table.Row key={disease.id}>
-              <Table.Cell>{disease.name}</Table.Cell>
+              <Table.Cell>
+                <Link href={`/admin/disease-classes/${disease.id}`}>
+                  {disease.name}
+                </Link>
+              </Table.Cell>
               <Table.Cell className="hidden md:table-cell">
                 {disease.aliasname}
               </Table.Cell>
