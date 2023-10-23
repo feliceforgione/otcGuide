@@ -1,15 +1,13 @@
 import React from "react";
-import prisma from "@/prisma/client";
-import { Button, Heading, Table } from "@radix-ui/themes";
-import Link from "next/link";
-import delay from "delay";
+import { Table } from "@radix-ui/themes";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import DiseaseClassesNavbar from "./navbar";
 
-async function DiseaseClasses() {
-  const diseaseClasses = await prisma.disease_class.findMany();
-  await delay(2000);
+function LoadingDiseaseClassesPage() {
+  const diseaseClasses = [1, 2, 3, 4, 5];
   return (
-    <div>
+    <>
       <DiseaseClassesNavbar />
       <Table.Root variant="surface">
         <Table.Header>
@@ -32,27 +30,35 @@ async function DiseaseClasses() {
         </Table.Header>
         <Table.Body>
           {diseaseClasses.map((disease) => (
-            <Table.Row key={disease.id}>
-              <Table.Cell>{disease.name}</Table.Cell>
-              <Table.Cell className="hidden md:table-cell">
-                {disease.aliasname}
+            <Table.Row key={disease}>
+              <Table.Cell>
+                <Skeleton />
               </Table.Cell>
               <Table.Cell className="hidden md:table-cell">
-                {disease.description}
+                <Skeleton />
               </Table.Cell>
               <Table.Cell className="hidden md:table-cell">
-                {disease.buttonimage}
+                <Skeleton />
               </Table.Cell>
-              <Table.Cell>{disease.order}</Table.Cell>
-              <Table.Cell>{String(disease.show)}</Table.Cell>
-              <Table.Cell>{String(disease.disable)}</Table.Cell>
+              <Table.Cell className="hidden md:table-cell">
+                <Skeleton />
+              </Table.Cell>
+              <Table.Cell>
+                <Skeleton />
+              </Table.Cell>
+              <Table.Cell>
+                <Skeleton />
+              </Table.Cell>
+              <Table.Cell>
+                <Skeleton />
+              </Table.Cell>
               <Table.Cell> Delete </Table.Cell>
             </Table.Row>
           ))}
         </Table.Body>
       </Table.Root>
-    </div>
+    </>
   );
 }
 
-export default DiseaseClasses;
+export default LoadingDiseaseClassesPage;
