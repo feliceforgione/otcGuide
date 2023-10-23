@@ -1,5 +1,7 @@
 "use client";
-import { useState } from "react";
+import { ErrorMessage, Spinner } from "@/app/components/";
+import { createDiseaseClassSchema } from "@/app/validationSchemas";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Button,
   Callout,
@@ -7,14 +9,11 @@ import {
   TextArea,
   TextField,
 } from "@radix-ui/themes";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { createDiseaseClassSchema } from "@/app/validationSchemas";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import ErrorMessage from "@/app/components/ErrorMessage";
-import Spinner from "@/app/components/spinner";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 type Form = z.infer<typeof createDiseaseClassSchema>;
 
