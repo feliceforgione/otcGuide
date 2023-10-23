@@ -1,7 +1,6 @@
 import prisma from "@/prisma/client";
-import { Heading, Table } from "@radix-ui/themes";
+import { Box, Heading, Table } from "@radix-ui/themes";
 import { notFound } from "next/navigation";
-import React from "react";
 
 interface Props {
   params: { id: string };
@@ -16,12 +15,12 @@ async function DiseaseClassDetailPage({ params }: Props) {
   if (!diseaseClass) notFound();
 
   return (
-    <>
+    <Box className="max-w-3xl">
       <Heading>{diseaseClass.name}</Heading>
       <Table.Root variant="surface" className="my-5">
         <Table.Body>
           <Table.Row>
-            <Table.RowHeaderCell className="!bg-blue-50">
+            <Table.RowHeaderCell className="!bg-blue-50 w-4/12">
               Alias
             </Table.RowHeaderCell>
             <Table.Cell>{diseaseClass.aliasname}</Table.Cell>
@@ -50,7 +49,7 @@ async function DiseaseClassDetailPage({ params }: Props) {
           </Table.Row>
         </Table.Body>
       </Table.Root>
-    </>
+    </Box>
   );
 }
 

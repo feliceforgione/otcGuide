@@ -45,7 +45,7 @@ function NewDiseaseClass() {
   }
 
   return (
-    <div className="max-w-xl">
+    <div className="max-w-2xl">
       <Heading as="h1" className="mb-6">
         Add Disease Class
       </Heading>

@@ -1,13 +1,11 @@
-import React from "react";
+import Link from "@/app/components/Link";
 import prisma from "@/prisma/client";
 import { Table } from "@radix-ui/themes";
-import delay from "delay";
 import DiseaseClassesNavbar from "./navbar";
-import Link from "@/app/components/Link";
 
 async function DiseaseClasses() {
   const diseaseClasses = await prisma.disease_class.findMany();
-  await delay(2000);
+
   return (
     <div>
       <DiseaseClassesNavbar />
