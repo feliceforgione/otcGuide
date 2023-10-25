@@ -33,10 +33,17 @@ function DiseaseClassForm({ diseaseClass }: { diseaseClass?: disease_class }) {
   async function handleFormSubmit(data: Form) {
     try {
       setSubmitting(true);
-      await axios.post("/api/disease-classes", {
-        ...data,
-        order: Number(data.order),
-      });
+      if (diseaseClass) {
+        await axios.patch(`/api/disease-classes/${diseaseClass.id}`, {
+          ...data,
+          order: Number(data.order),
+        });
+      } else {
+        await axios.post("/api/disease-classes", {
+          ...data,
+          order: Number(data.order),
+        });
+      }
       router.push("/admin/disease-classes");
     } catch (error) {
       setSubmitting(false);
@@ -118,7 +125,8 @@ function DiseaseClassForm({ diseaseClass }: { diseaseClass?: disease_class }) {
         </div>
 
         <Button disabled={isSubmitting}>
-          Submit New Disease Class {isSubmitting && <Spinner />}
+          {diseaseClass ? "Update Disease Class" : "Submit New Disease Class"}{" "}
+          {isSubmitting && <Spinner />}
         </Button>
       </form>
     </div>
