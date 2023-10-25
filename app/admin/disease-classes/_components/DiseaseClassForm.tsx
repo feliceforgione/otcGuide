@@ -1,6 +1,6 @@
 "use client";
 import { ErrorMessage, Spinner } from "@/app/components/";
-import { createDiseaseClassSchema } from "@/app/validationSchemas";
+import { diseaseClassSchema } from "@/app/validationSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { disease_class } from "@prisma/client";
 import {
@@ -16,7 +16,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-type Form = z.infer<typeof createDiseaseClassSchema>;
+type Form = z.infer<typeof diseaseClassSchema>;
 
 function DiseaseClassForm({ diseaseClass }: { diseaseClass?: disease_class }) {
   const router = useRouter();
@@ -25,7 +25,7 @@ function DiseaseClassForm({ diseaseClass }: { diseaseClass?: disease_class }) {
     handleSubmit,
     formState: { errors },
   } = useForm<Form>({
-    resolver: zodResolver(createDiseaseClassSchema),
+    resolver: zodResolver(diseaseClassSchema),
   });
   const [error, setError] = useState("");
   const [isSubmitting, setSubmitting] = useState(false);
