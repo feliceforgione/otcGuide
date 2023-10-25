@@ -2,7 +2,7 @@ import prisma from "@/prisma/client";
 import { Box, Grid, Heading } from "@radix-ui/themes";
 import { notFound } from "next/navigation";
 import DiseaseClassDetail from "./DiseaseClassDetail";
-import EditDiseaseClassButton from "./editDiseaseClassButton";
+import EditDiseaseClassButton from "./EditDiseaseClassButton";
 
 interface Props {
   params: { id: string };
