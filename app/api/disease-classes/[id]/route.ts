@@ -33,3 +33,23 @@ export async function PATCH(
 
   return NextResponse.json(updatedDiseaseClass);
 }
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const diseaseClass = await prisma.disease_class.findUnique({
+    where: { id: parseInt(params.id) },
+  });
+  if (!diseaseClass)
+    return NextResponse.json(
+      { error: "Invalid disease class" },
+      { status: 404 }
+    );
+
+  await prisma.disease_class.delete({
+    where: { id: parseInt(params.id) },
+  });
+
+  return NextResponse.json({});
+}
