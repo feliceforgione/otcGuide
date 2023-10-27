@@ -1,4 +1,4 @@
-import DiseaseClassFormSkeleton from "../_components/DiseaseClassFormSkeleton";
+import DiseaseClassFormSkeleton from "../../_components/DiseaseClassFormSkeleton";
 
 function LoadingNewDiseaseClass() {
   return <DiseaseClassFormSkeleton />;
