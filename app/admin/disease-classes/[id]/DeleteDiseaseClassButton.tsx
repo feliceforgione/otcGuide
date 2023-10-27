@@ -1,11 +1,20 @@
 "use client";
 import { AlertDialog, Button, Flex } from "@radix-ui/themes";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 function DeleteDiseaseClassButton({
   diseaseClassId,
 }: {
   diseaseClassId: number;
 }) {
+  const router = useRouter();
+
+  async function handleDelete() {
+    await axios.delete(`/api/disease-classes/${diseaseClassId}`);
+    router.push("/admin/disease-classes/");
+    router.refresh();
+  }
   return (
     <>
       <AlertDialog.Root>
@@ -24,7 +33,9 @@ function DeleteDiseaseClassButton({
               </Button>
             </AlertDialog.Cancel>
             <AlertDialog.Action>
-              <Button color="red">Delete</Button>
+              <Button color="red" onClick={handleDelete}>
+                Delete
+              </Button>
             </AlertDialog.Action>
           </Flex>
         </AlertDialog.Content>
