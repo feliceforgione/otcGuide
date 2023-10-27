@@ -1,4 +1,5 @@
 "use client";
+import { Spinner } from "@/app/components";
 import { AlertDialog, Button, Flex } from "@radix-ui/themes";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -10,22 +11,28 @@ function DeleteDiseaseClassButton({
   diseaseClassId: number;
 }) {
   const [error, setError] = useState(false);
+  const [isDeleting, setDeleting] = useState(false);
   const router = useRouter();
 
   async function handleDelete() {
     try {
+      setDeleting(true);
       await axios.delete(`/api/disease-classes/${diseaseClassId}`);
       router.push("/admin/disease-classes/");
       router.refresh();
     } catch (error) {
       setError(true);
+      setDeleting(false);
     }
   }
   return (
     <>
       <AlertDialog.Root>
         <AlertDialog.Trigger>
-          <Button color="red">Delete Disease Class</Button>
+          <Button color="red" disabled={isDeleting}>
+            {" "}
+            {isDeleting && <Spinner />} Delete Disease Class
+          </Button>
         </AlertDialog.Trigger>
         <AlertDialog.Content>
           <AlertDialog.Title>Confirm Deletion</AlertDialog.Title>
