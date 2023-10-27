@@ -57,4 +57,6 @@ async function DiseaseClasses() {
   );
 }
 
+export const dynamic = "force-dynamic";
+
 export default DiseaseClasses;

@@ -45,6 +45,7 @@ function DiseaseClassForm({ diseaseClass }: { diseaseClass?: disease_class }) {
         });
       }
       router.push("/admin/disease-classes");
+      router.refresh();
     } catch (error) {
       setSubmitting(false);
       setError("An unexpected error has occured");
