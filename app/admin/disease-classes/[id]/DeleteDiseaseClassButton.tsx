@@ -2,18 +2,24 @@
 import { AlertDialog, Button, Flex } from "@radix-ui/themes";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 function DeleteDiseaseClassButton({
   diseaseClassId,
 }: {
   diseaseClassId: number;
 }) {
+  const [error, setError] = useState(false);
   const router = useRouter();
 
   async function handleDelete() {
-    await axios.delete(`/api/disease-classes/${diseaseClassId}`);
-    router.push("/admin/disease-classes/");
-    router.refresh();
+    try {
+      await axios.delete(`/api/disease-classes/${diseaseClassId}`);
+      router.push("/admin/disease-classes/");
+      router.refresh();
+    } catch (error) {
+      setError(true);
+    }
   }
   return (
     <>
@@ -38,6 +44,22 @@ function DeleteDiseaseClassButton({
               </Button>
             </AlertDialog.Action>
           </Flex>
+        </AlertDialog.Content>
+      </AlertDialog.Root>
+      <AlertDialog.Root open={error}>
+        <AlertDialog.Content>
+          <AlertDialog.Title>Error</AlertDialog.Title>
+          <AlertDialog.Description>
+            This could not be deleted
+          </AlertDialog.Description>
+          <Button
+            mt="4"
+            color="gray"
+            variant="soft"
+            onClick={() => setError(false)}
+          >
+            Close
+          </Button>
         </AlertDialog.Content>
       </AlertDialog.Root>
     </>
