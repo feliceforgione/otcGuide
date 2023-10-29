@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import toast from "react-hot-toast";
 
 type Form = z.infer<typeof diseaseClassSchema>;
 
@@ -38,17 +39,20 @@ function DiseaseClassForm({ diseaseClass }: { diseaseClass?: disease_class }) {
           ...data,
           order: Number(data.order),
         });
+        toast.success("Disease Class updated");
       } else {
         await axios.post("/api/disease-classes", {
           ...data,
           order: Number(data.order),
         });
+        toast.success("Disease Class added");
       }
       router.push("/admin/disease-classes");
       router.refresh();
     } catch (error) {
       setSubmitting(false);
       setError("An unexpected error has occured");
+      toast.error("An unexpected error has occured");
     }
   }
 
