@@ -4,12 +4,15 @@ import { notFound } from "next/navigation";
 import DiseaseClassDetail from "./DiseaseClassDetail";
 import EditDiseaseClassButton from "./EditDiseaseClassButton";
 import DeleteDiseaseClassButton from "./DeleteDiseaseClassButton";
+import { getServerSession } from "next-auth";
+import authOptions from "@/app/auth/authOptions";
 
 interface Props {
   params: { id: string };
 }
 
 async function DiseaseClassDetailPage({ params }: Props) {
+  const session = await getServerSession(authOptions);
   if (isNaN(parseInt(params.id))) notFound();
   const diseaseClass = await prisma.disease_class.findUnique({
     where: { id: parseInt(params.id) },
@@ -24,12 +27,14 @@ async function DiseaseClassDetailPage({ params }: Props) {
         <Box className="lg:col-span-4">
           <DiseaseClassDetail diseaseClass={diseaseClass} />
         </Box>
-        <Box>
-          <Flex direction="column" gap="4">
-            <EditDiseaseClassButton diseaseClassId={diseaseClass.id} />
-            <DeleteDiseaseClassButton diseaseClassId={diseaseClass.id} />
-          </Flex>
-        </Box>
+        {session && (
+          <Box>
+            <Flex direction="column" gap="4">
+              <EditDiseaseClassButton diseaseClassId={diseaseClass.id} />
+              <DeleteDiseaseClassButton diseaseClassId={diseaseClass.id} />
+            </Flex>
+          </Box>
+        )}
       </Grid>
     </Box>
   );
