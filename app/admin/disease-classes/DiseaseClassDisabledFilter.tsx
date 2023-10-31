@@ -1,10 +1,11 @@
 "use client";
 import React from "react";
 import { Select } from "@radix-ui/themes";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 function DiseaseClassDisabledFilter() {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const disabledValues: { label: string; value?: "0" | "1" }[] = [
     { label: "All" },
@@ -13,12 +14,23 @@ function DiseaseClassDisabledFilter() {
   ];
 
   function handleSelect(value: string) {
-    const query = value === "all" ? "" : `?disabled=${value}`;
+    const params = new URLSearchParams();
+    const disabled = value === "all" ? "" : value;
+    if (disabled) params.append("disabled", disabled);
+    if (searchParams.get("sortOrder"))
+      params.append("sortOrder", searchParams.get("sortOrder")!);
+    if (searchParams.get("orderBy"))
+      params.append("orderBy", searchParams.get("orderBy")!);
+
+    const query = params.size ? `?${params.toString()}` : "";
     router.push(`/admin/disease-classes/${query}`);
   }
 
   return (
-    <Select.Root onValueChange={handleSelect}>
+    <Select.Root
+      onValueChange={handleSelect}
+      defaultValue={searchParams.get("disabled") || ""}
+    >
       <Select.Trigger placeholder="Disabled" />
       <Select.Content>
         {disabledValues.map((selectValue) => (
