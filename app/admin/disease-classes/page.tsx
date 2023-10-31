@@ -2,12 +2,15 @@ import prisma from "@/prisma/client";
 import { disease_class } from "@prisma/client";
 import DataTableWithSorting from "../_components/DataTableWithSorting";
 import DiseaseClassesNavbar from "./navbar";
+import Pagination from "../_components/Pagination";
+import { Flex } from "@radix-ui/themes";
 
 interface Props {
   searchParams: {
-    disabled?: string;
-    orderBy?: keyof disease_class;
+    disabled: string;
+    orderBy: keyof disease_class;
     sortOrder: "asc" | "desc";
+    page: string;
   };
 }
 
@@ -47,11 +50,21 @@ async function DiseaseClasses({ searchParams }: Props) {
     .includes(searchParams.orderBy!)
     ? { [searchParams.orderBy!]: searchParams.sortOrder }
     : undefined;
+
+  const page = parseInt(searchParams.page) || 1;
+  const pageSize = 10;
+
+  const where = { disable };
+
   const diseaseClasses = await prisma.disease_class.findMany({
-    where: {
-      disable,
-    },
+    where,
     orderBy,
+    skip: (page - 1) * pageSize,
+    take: pageSize,
+  });
+
+  const issueCount = await prisma.disease_class.count({
+    where,
   });
 
   return (
@@ -63,6 +76,13 @@ async function DiseaseClasses({ searchParams }: Props) {
         idColumn="id"
         urlDetailPath="/admin/disease-classes/"
       />
+      <Flex justify={"center"} className="py-2">
+        <Pagination
+          itemCount={issueCount}
+          pageSize={pageSize}
+          currentPage={page}
+        />
+      </Flex>
     </div>
   );
 }
