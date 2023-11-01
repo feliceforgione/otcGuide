@@ -40,4 +40,15 @@ async function DiseaseClassDetailPage({ params }: Props) {
   );
 }
 
+export async function generateMetadata({ params }: Props) {
+  const disease = await prisma.disease_class.findUnique({
+    where: { id: parseInt(params.id) },
+  });
+
+  return {
+    title: disease?.aliasname,
+    description: "Details of disease class " + disease?.id,
+  };
+}
+
 export default DiseaseClassDetailPage;
