@@ -1,22 +1,27 @@
+import authOptions from "@/app/auth/authOptions";
 import prisma from "@/prisma/client";
 import { Box, Flex, Grid, Heading } from "@radix-ui/themes";
+import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
+import { cache } from "react";
+import DeleteDiseaseClassButton from "./DeleteDiseaseClassButton";
 import DiseaseClassDetail from "./DiseaseClassDetail";
 import EditDiseaseClassButton from "./EditDiseaseClassButton";
-import DeleteDiseaseClassButton from "./DeleteDiseaseClassButton";
-import { getServerSession } from "next-auth";
-import authOptions from "@/app/auth/authOptions";
 
 interface Props {
   params: { id: string };
 }
 
+const fetchDiseaseClass = cache((diseaseClassId: string) => {
+  return prisma.disease_class.findUnique({
+    where: { id: parseInt(diseaseClassId) },
+  });
+});
+
 async function DiseaseClassDetailPage({ params }: Props) {
   const session = await getServerSession(authOptions);
   if (isNaN(parseInt(params.id))) notFound();
-  const diseaseClass = await prisma.disease_class.findUnique({
-    where: { id: parseInt(params.id) },
-  });
+  const diseaseClass = await fetchDiseaseClass(params.id);
 
   if (!diseaseClass) notFound();
 
@@ -41,13 +46,11 @@ async function DiseaseClassDetailPage({ params }: Props) {
 }
 
 export async function generateMetadata({ params }: Props) {
-  const disease = await prisma.disease_class.findUnique({
-    where: { id: parseInt(params.id) },
-  });
+  const diseaseClass = await fetchDiseaseClass(params.id);
 
   return {
-    title: disease?.aliasname,
-    description: "Details of disease class " + disease?.id,
+    title: diseaseClass?.aliasname,
+    description: "Details of disease class " + diseaseClass?.id,
   };
 }
 
