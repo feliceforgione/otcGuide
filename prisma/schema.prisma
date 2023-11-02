@@ -11,14 +11,29 @@ datasource db {
 }
 
 model disease_class {
-  id          Int     @id @default(autoincrement())
-  name        String  @unique @db.VarChar(255)
-  aliasname   String? @db.VarChar(100)
-  description String? @db.VarChar(255)
-  buttonimage String? @db.VarChar(255)
-  order       Int?    @db.TinyInt
-  show        Boolean @default(false)
-  disable     Boolean @default(false)
+  id                 Int                @id @default(autoincrement())
+  name               String             @unique @db.VarChar(255)
+  aliasname          String?            @db.VarChar(100)
+  description        String?            @db.VarChar(255)
+  buttonimage        String?            @db.VarChar(255)
+  order              Int?               @db.TinyInt
+  show               Boolean            @default(false)
+  disable            Boolean            @default(false)
+  disease_subclasses disease_subclass[]
+}
+
+model disease_subclass {
+  disease_subclass_id          Int     @id @default(autoincrement())
+  disease_subclass_name        String  @db.VarChar(255)
+  disease_subclass_synonyms    String? @db.VarChar(255)
+  disease_subclass_description String? @db.MediumText
+  disease_subclass_order       Int?    @db.TinyInt
+  disease_subclass_disable     Boolean @default(false)
+  disease_subclass_overview    String? @db.MediumText
+  nonpharm                     String? @db.MediumText
+
+  disease_class_id Int           
+  disease_class    disease_class @relation(fields: [disease_class_id], references: [id])
 }
 
 model Account {
