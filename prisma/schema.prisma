@@ -54,6 +54,18 @@ model exclusion_questions {
   disease_subclass    disease_subclass? @relation(fields: [disease_subclass_id], references: [disease_subclass_id])
 }
 
+model lnk_mh_algorithm_ques {
+  disease_subclass_id Int  @id
+  infant              Int?
+  child               Int?
+  adult_female        Int
+  adult_male          Int
+  elderly_female      Int?
+  elderly_male        Int?
+  pregnant            Int?
+  nursing             Int?
+}
+
 model Account {
   id                String  @id @default(cuid())
   userId            String

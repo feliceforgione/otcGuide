@@ -1,0 +1,9 @@
+-- AlterTable
+ALTER TABLE `exclusion_questions` ADD COLUMN `adult` BOOLEAN NOT NULL DEFAULT false,
+    ADD COLUMN `child` BOOLEAN NOT NULL DEFAULT false,
+    ADD COLUMN `elderly` BOOLEAN NOT NULL DEFAULT false,
+    ADD COLUMN `female` BOOLEAN NOT NULL DEFAULT false,
+    ADD COLUMN `infant` BOOLEAN NOT NULL DEFAULT false,
+    ADD COLUMN `male` BOOLEAN NOT NULL DEFAULT false,
+    ADD COLUMN `nursing` BOOLEAN NOT NULL DEFAULT false,
+    ADD COLUMN `pregnant` BOOLEAN NOT NULL DEFAULT false;
