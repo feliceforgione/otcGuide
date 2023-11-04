@@ -1,16 +1,25 @@
+"use client";
+import { useGuideStore } from "@/app/utils/store";
 import { Card, Heading, Inset, Text } from "@radix-ui/themes";
-import React from "react";
+import { useRouter } from "next/navigation";
 
 interface Props {
+  id: number;
   title: string;
   image?: string;
   description?: string;
-  link?: string;
 }
 
-function ClassCard({ title, image, description, link }: Props) {
+function SubClassCard({ id, title, image, description }: Props) {
+  const router = useRouter();
+  const { updateCondition } = useGuideStore();
+
+  function handleClassClick() {
+    updateCondition({ diseaseSubclassId: id, diseaseSubClassName: title });
+    router.push("/guide/medicalhistory");
+  }
   return (
-    <Card>
+    <Card onClick={handleClassClick} className="cursor-pointer">
       <Inset clip="padding-box" side="top" pb="current">
         <img
           src="https://images.unsplash.com/photo-1617050318658-a9a3175e34cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
@@ -32,4 +41,4 @@ function ClassCard({ title, image, description, link }: Props) {
   );
 }
 
-export default ClassCard;
+export default SubClassCard;

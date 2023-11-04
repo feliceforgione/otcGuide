@@ -1,6 +1,6 @@
 import prisma from "@/prisma/client";
 import { Grid, Heading } from "@radix-ui/themes";
-import ClassCard from "../_components/ClassCard";
+import SubClassCard from "./SubClassCard";
 
 interface Props {
   params: { id: string };
@@ -14,11 +14,14 @@ async function DiseaseSubClassesSelection({ params }: Props) {
   });
   return (
     <>
-      <Heading>What is the patient looking to treat?</Heading>
+      <Heading className="pageHeading">
+        What is the patient looking to treat?
+      </Heading>
       <Grid columns="3" gap="3" width="auto">
         {diseaseSubClasses.map((diseaseClass) => (
-          <ClassCard
+          <SubClassCard
             key={diseaseClass.disease_subclass_id}
+            id={diseaseClass.disease_subclass_id}
             title={diseaseClass.disease_subclass_name!}
             description={diseaseClass.disease_subclass_description || undefined}
           />

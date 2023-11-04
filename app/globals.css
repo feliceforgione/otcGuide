@@ -15,3 +15,11 @@
 body {
   color: rgb(var(--foreground-rgb));
 }
+
+.mh-button {
+  @apply py-2 px-4 rounded-lg bg-blue-400 text-white w-60;
+}
+
+.pageHeading {
+  @apply text-center pb-4 uppercase text-blue-800;
+}
