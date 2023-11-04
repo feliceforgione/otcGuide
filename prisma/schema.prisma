@@ -39,11 +39,19 @@ model disease_subclass {
 }
 
 model exclusion_questions {
-  question_id Int    @id @default(autoincrement())
-  question    String @db.VarChar(255)
+  question_id Int     @id @default(autoincrement())
+  question    String  @db.VarChar(255)
+  male        Boolean @default(false)
+  female      Boolean @default(false)
+  infant      Boolean @default(false)
+  child       Boolean @default(false)
+  adult       Boolean @default(false)
+  elderly     Boolean @default(false)
+  pregnant    Boolean @default(false)
+  nursing     Boolean @default(false)
 
-  disease_subclass_id Int
-  disease_subclass    disease_subclass @relation(fields: [disease_subclass_id], references: [disease_subclass_id])
+  disease_subclass_id Int?
+  disease_subclass    disease_subclass? @relation(fields: [disease_subclass_id], references: [disease_subclass_id])
 }
 
 model Account {
