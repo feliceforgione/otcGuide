@@ -32,8 +32,18 @@ model disease_subclass {
   disease_subclass_overview    String? @db.MediumText
   nonpharm                     String? @db.MediumText
 
-  disease_class_id Int           
+  disease_class_id Int
   disease_class    disease_class @relation(fields: [disease_class_id], references: [id])
+
+  exclusion_questions exclusion_questions[]
+}
+
+model exclusion_questions {
+  question_id Int    @id @default(autoincrement())
+  question    String @db.VarChar(255)
+
+  disease_subclass_id Int
+  disease_subclass    disease_subclass @relation(fields: [disease_subclass_id], references: [disease_subclass_id])
 }
 
 model Account {
