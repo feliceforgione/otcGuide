@@ -1,10 +1,19 @@
 import { create } from "zustand";
 import { mountStoreDevtool } from "simple-zustand-devtools";
 
-export type MedicalHistory = {
+export type MedicalHistoryType = {
   gender: "male" | "female" | "pregnant" | "nursing";
   pregnancy?: "nursing" | "pregnant" | null;
-  ageGroup: "child" | "adult" | "elderly";
+  ageGroup: "infant" | "child" | "adult" | "elderly";
+  ageGenderGroup?:
+    | "infant"
+    | "child"
+    | "adult_female"
+    | "adult_male"
+    | "elderly_male"
+    | "elderly_female"
+    | "nursing"
+    | "pregnant";
 };
 
 type Condition = {
@@ -16,10 +25,10 @@ type Condition = {
 type PlanType = {
   condition: Condition | null;
   products: string[];
-  medicalHistory: MedicalHistory | null;
+  medicalHistory: MedicalHistoryType | null;
   updateCondition: (condition: Condition) => void;
   updateProducts: (products: string[]) => void;
-  updateMedicalHistory: (mh: MedicalHistory) => void;
+  updateMedicalHistory: (mh: MedicalHistoryType) => void;
   reset: () => void;
 };
 
@@ -41,13 +50,13 @@ export const useGuideStore = create<PlanType>((set) => ({
   },
   updateProducts(products) {
     set((state) => ({
+      ...state,
       products,
-      medicalHistory: state.medicalHistory,
     }));
   },
   updateMedicalHistory(mh) {
     set((state) => ({
-      products: state.products,
+      ...state,
       medicalHistory: mh,
     }));
   },
