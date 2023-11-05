@@ -66,6 +66,70 @@ model lnk_mh_algorithm_ques {
   nursing             Int?
 }
 
+model algorithm_questions {
+  algorithm_question_id Int                       @id @default(autoincrement())
+  disease_subclass_id   Int?
+  question              String?                   @db.VarChar(255)
+  question_list         String?                   @db.TinyText
+  yes_type              algorithm_questions_type?
+  yes_link_id           Int?
+  no_type               algorithm_questions_type?
+  no_link_id            Int?
+  referral_comments     String?                   @db.TinyText
+  comments              String?                   @db.Text
+}
+
+enum algorithm_questions_type {
+  question
+  referral
+  plan
+  symptoms
+}
+
+model treatment_plan {
+  treatment_plan_id   Int                @id @default(autoincrement())
+  disease_subclass_id Int
+  plan_name           String             @default("") @db.VarChar(255)
+  txt_nonpharm        String?            @db.MediumText
+  txt_pharm           String?            @db.MediumText
+  tabs_num            Int                @default(0) @db.SmallInt
+  tab3_label          String?            @db.VarChar(30)
+  tab4_label          String?            @db.VarChar(30)
+  tab5_label          String?            @db.VarChar(30)
+  upcs                lnk_trt_plan_upc[]
+}
+
+model lnk_trt_plan_upc {
+  lnk_id         Int    @id @default(autoincrement())
+  upc            String @db.VarChar(25)
+  treatment_line Int    @default(1) @db.SmallInt
+  upc_order      Int?   @db.UnsignedTinyInt
+
+  treatment_plan_id Int?
+  treatment_plan    treatment_plan? @relation(fields: [treatment_plan_id], references: [treatment_plan_id])
+}
+
+model lnk_trt_plan_advice {
+  lnk_id            Int                             @id @default(autoincrement())
+  treatment_plan_id Int
+  advice_id         Int
+  advice_type       lnk_trt_plan_advice_advice_type
+  advice_order      Int?                            @db.TinyInt
+}
+
+enum lnk_trt_plan_advice_advice_type {
+  nonpharm
+  pharm
+}
+
+model treatment_advice {
+  advice_id           Int      @id @default(autoincrement())
+  disease_subclass_id Int      
+  title               String?  @db.VarChar(255)
+  text                String   @db.LongText
+  list                String?  @db.MediumText
+}
+
 model Account {
   id                String  @id @default(cuid())
   userId            String
