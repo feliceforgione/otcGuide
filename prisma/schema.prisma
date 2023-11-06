@@ -97,6 +97,8 @@ model treatment_plan {
   tab4_label          String?            @db.VarChar(30)
   tab5_label          String?            @db.VarChar(30)
   upcs                lnk_trt_plan_upc[]
+
+  treatment_advice  lnk_trt_plan_advice[]
 }
 
 model lnk_trt_plan_upc {
@@ -110,11 +112,15 @@ model lnk_trt_plan_upc {
 }
 
 model lnk_trt_plan_advice {
-  lnk_id            Int                             @id @default(autoincrement())
-  treatment_plan_id Int
-  advice_id         Int
+  lnk_id            Int                             @id @default(autoincrement())  
   advice_type       lnk_trt_plan_advice_advice_type
   advice_order      Int?                            @db.TinyInt
+
+  treatment_plan treatment_plan @relation(fields: [treatment_plan_id], references: [treatment_plan_id])
+  treatment_plan_id Int
+  treatment_advice treatment_advice @relation(fields: [advice_id], references: [advice_id])
+  advice_id         Int
+
 }
 
 enum lnk_trt_plan_advice_advice_type {
@@ -128,6 +134,8 @@ model treatment_advice {
   title               String?  @db.VarChar(255)
   text                String   @db.LongText
   list                String?  @db.MediumText
+
+  treatment_plan lnk_trt_plan_advice[]
 }
 
 model Account {
