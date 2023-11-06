@@ -98,7 +98,7 @@ model treatment_plan {
   tab5_label          String?            @db.VarChar(30)
   upcs                lnk_trt_plan_upc[]
 
-  treatment_advice  lnk_trt_plan_advice[]
+  treatment_advice lnk_trt_plan_advice[]
 }
 
 model lnk_trt_plan_upc {
@@ -112,15 +112,14 @@ model lnk_trt_plan_upc {
 }
 
 model lnk_trt_plan_advice {
-  lnk_id            Int                             @id @default(autoincrement())  
-  advice_type       lnk_trt_plan_advice_advice_type
-  advice_order      Int?                            @db.TinyInt
+  lnk_id       Int                             @id @default(autoincrement())
+  advice_type  lnk_trt_plan_advice_advice_type
+  advice_order Int?                            @db.TinyInt
 
-  treatment_plan treatment_plan @relation(fields: [treatment_plan_id], references: [treatment_plan_id])
+  treatment_plan    treatment_plan   @relation(fields: [treatment_plan_id], references: [treatment_plan_id])
   treatment_plan_id Int
-  treatment_advice treatment_advice @relation(fields: [advice_id], references: [advice_id])
+  treatment_advice  treatment_advice @relation(fields: [advice_id], references: [advice_id])
   advice_id         Int
-
 }
 
 enum lnk_trt_plan_advice_advice_type {
@@ -129,13 +128,257 @@ enum lnk_trt_plan_advice_advice_type {
 }
 
 model treatment_advice {
-  advice_id           Int      @id @default(autoincrement())
-  disease_subclass_id Int      
-  title               String?  @db.VarChar(255)
-  text                String   @db.LongText
-  list                String?  @db.MediumText
+  advice_id           Int     @id @default(autoincrement())
+  disease_subclass_id Int
+  title               String? @db.VarChar(255)
+  text                String  @db.LongText
+  list                String? @db.MediumText
 
   treatment_plan lnk_trt_plan_advice[]
+}
+
+model lnk_ingredient_filter_questions {
+  lnk_id             Int @id @default(autoincrement())
+  ingredient_id      Int
+  filter_question_id Int
+}
+
+model filter_questions {
+  filter_question_id Int    @id @default(autoincrement())
+  question           String @db.Text
+  reasoning          String @db.VarChar(255)
+}
+
+model upc {
+  upc_id Int     @id @default(autoincrement())
+  upc    String  @unique(map: "upc") @db.VarChar(25)
+  asin   String? @db.VarChar(25)
+
+  product_line    String  @db.VarChar(255)
+  item_name       String  @db.VarChar(255)
+  description     String? @db.Text
+  product_details String? @db.TinyText
+
+  upc_label_unit_dose String? @db.VarChar(100)
+
+  size        Float? @db.Float
+  size_uom_id Int?
+  flavor_id   Int?
+
+  other_info    String? @db.MediumText
+  questions     String? @db.MediumText
+  num_of_items  Int?    @db.SmallInt
+  height        Int?    @db.SmallInt
+  height_units  String? @db.VarChar(200)
+  length        Int?    @db.SmallInt
+  length_units  String? @db.VarChar(200)
+  width         Int?    @db.SmallInt
+  width_units   String? @db.VarChar(200)
+  weight        Int?    @db.SmallInt
+  weight_units  String? @db.VarChar(200)
+  bkg_highlight String  @db.VarChar(6)
+  flag_yellow   Int     @default(0) @db.TinyInt
+  flag_red      Int     @default(0) @db.TinyInt
+
+  brand_composition brand_composition[]
+  images            images[]
+  directions        directions[]
+  indications       indications[]
+  warnings          warnings[]
+  features          features[]
+
+  product_type    product_type? @relation(fields: [product_type_id], references: [product_type_id])
+  product_type_id Int?
+
+  brand    brands? @relation(fields: [brand_id], references: [brand_id])
+  brand_id Int?
+
+  manufacturer    manufacturer? @relation(fields: [manufacturer_id], references: [manufacturer_id])
+  manufacturer_id Int?
+
+  dosage_form    dosage_form? @relation(fields: [dosage_form_id], references: [dosage_form_id])
+  dosage_form_id Int?
+
+  validation_route validation_route? @relation(fields: [route_id], references: [route_id])
+  route_id         Int?
+}
+
+model brand_composition {
+  brand_composition_id Int @id @default(autoincrement())
+
+  upc_product upc?    @relation(fields: [upc], references: [upc])
+  upc         String? @db.VarChar(25)
+
+  ingredient    ingredients? @relation(fields: [ingredient_id], references: [ingredient_id])
+  ingredient_id Int?
+
+  ingredient_use    ingredient_uses? @relation(fields: [ingredient_use_id], references: [ingredient_use_id])
+  ingredient_use_id Int?
+
+  ingredient_type    ingredient_type? @relation(fields: [ingredient_type_id], references: [ingredient_type_id])
+  ingredient_type_id Int?
+}
+
+model ingredients {
+  ingredient_id Int @id @default(autoincrement())
+
+  ingredient_strength          Float?  @db.Float
+  ingredient_strength_units_id Int?
+  ingredient_equivalence       String? @db.VarChar(255)
+  ingredient_hypoallergenic    Int     @default(0) @db.TinyInt
+
+  brand_composition brand_composition[]
+
+  name               ingredient_name? @relation(fields: [ingredient_name_id], references: [ingredient_name_id])
+  ingredient_name_id Int?
+
+  medicalCondition lnk_ingredient_medical_condition[]
+}
+
+model ingredient_name {
+  ingredient_name_id         Int           @id @default(autoincrement())
+  ingredient_name            String        @unique(map: "ingredient_name") @db.VarChar(255)
+  ingredient_broader_name_id Int?
+  ingredient                 ingredients[]
+}
+
+model ingredient_uses {
+  ingredient_use_id Int    @id @default(autoincrement())
+  ingredient_use    String @unique(map: "ingredient_use") @db.VarChar(255)
+
+  brand_composition brand_composition[]
+}
+
+model ingredient_type {
+  ingredient_type_id Int    @id @default(autoincrement())
+  ingredient_type    String @unique(map: "ingredient_type") @db.VarChar(255)
+
+  brand_composition brand_composition[]
+}
+
+model lnk_ingredient_medical_condition {
+  lnk_id Int @id @default(autoincrement())
+
+  ingredient    ingredients @relation(fields: [ingredient_id], references: [ingredient_id])
+  ingredient_id Int
+
+  medicalCondition     medical_conditions @relation(fields: [medical_condition_id], references: [medical_condition_id])
+  medical_condition_id Int
+}
+
+model medical_conditions {
+  medical_condition_id          Int    @id @default(autoincrement())
+  medical_condition             String @db.VarChar(255)
+  medical_condition_layman_term String @db.VarChar(255)
+
+  ingredient lnk_ingredient_medical_condition[]
+}
+
+model validation_strength_units {
+  strength_unit_id           Int    @id @default(autoincrement())
+  strength_unit_abbreviation String @db.VarChar(25)
+  strength_unit_description  String @db.VarChar(100)
+
+  @@unique([strength_unit_abbreviation, strength_unit_description], map: "strength_unit_abbreviation")
+}
+
+model product_type {
+  product_type_id Int    @id @default(autoincrement())
+  type            String @unique(map: "type") @db.VarChar(255)
+
+  upc upc[]
+}
+
+model brands {
+  brand_id   Int    @id @default(autoincrement())
+  brand_name String @unique(map: "brand_name") @db.VarChar(255)
+
+  upc upc[]
+}
+
+model manufacturer {
+  manufacturer_id   Int    @id @default(autoincrement())
+  manufacturer_name String @unique(map: "manufacturer_name") @db.VarChar(255)
+
+  upc upc[]
+}
+
+model dosage_form {
+  dosage_form_id    Int    @id @default(autoincrement())
+  dosage_form_class String @db.VarChar(255)
+  dosage_form_term  String @db.VarChar(255)
+
+  upc upc[]
+}
+
+model validation_route {
+  route_id           Int    @id @default(autoincrement())
+  route_abbreviation String @db.VarChar(25)
+  route_description  String @db.VarChar(100)
+
+  upc upc[]
+
+  @@unique([route_abbreviation, route_description], map: "route_abbreviation")
+}
+
+model directions {
+  direction_id    Int     @id @default(autoincrement())
+  direction_title String? @db.VarChar(255)
+  direction_txt   String? @db.Text
+  direction_list  String? @db.Text
+  order           Int?    @db.TinyInt
+
+  upc_product upc?    @relation(fields: [upc], references: [upc])
+  upc         String? @db.VarChar(25)
+}
+
+model indications {
+  indication_id   Int     @id @default(autoincrement())
+  indication_txt  String  @db.Text
+  indication_list String? @db.VarChar(255)
+  order           Int?    @db.TinyInt
+
+  upc_product upc?    @relation(fields: [upc], references: [upc])
+  upc         String? @db.VarChar(25)
+}
+
+model warnings {
+  warning_id    Int     @id @default(autoincrement())
+  warning_title String? @db.VarChar(255)
+  warning_txt   String? @db.Text
+  warning_list  String? @db.Text
+  order         Int?    @db.TinyInt
+
+  upc_product upc?    @relation(fields: [upc], references: [upc])
+  upc         String? @db.VarChar(25)
+}
+
+model features {
+  feature_id  Int     @id @default(autoincrement())
+  ASIN        String? @db.VarChar(25)
+  feature_txt String  @db.VarChar(255)
+
+  upc_product upc?    @relation(fields: [upc], references: [upc])
+  upc         String? @db.VarChar(25)
+}
+
+model images {
+  image_id Int @id @default(autoincrement())
+
+  ASIN   String?      @db.VarChar(25)
+  link   String       @db.VarChar(255)
+  type   images_type?
+  height Int?         @db.SmallInt
+  width  Int?         @db.SmallInt
+
+  upc_product upc?    @relation(fields: [upc], references: [upc])
+  upc         String? @db.VarChar(25)
+}
+
+enum images_type {
+  small
+  medium
+  large
 }
 
 model Account {
