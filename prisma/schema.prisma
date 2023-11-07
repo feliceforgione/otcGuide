@@ -138,8 +138,11 @@ model treatment_advice {
 }
 
 model lnk_ingredient_filter_questions {
-  lnk_id             Int @id @default(autoincrement())
+  lnk_id Int @id @default(autoincrement())
+
+  ingredient         ingredients      @relation(fields: [ingredient_id], references: [ingredient_id])
   ingredient_id      Int
+  filter_question    filter_questions @relation(fields: [filter_question_id], references: [filter_question_id])
   filter_question_id Int
 }
 
@@ -147,6 +150,8 @@ model filter_questions {
   filter_question_id Int    @id @default(autoincrement())
   question           String @db.Text
   reasoning          String @db.VarChar(255)
+
+  ingredient lnk_ingredient_filter_questions[]
 }
 
 model upc {
@@ -233,6 +238,7 @@ model ingredients {
   ingredient_name_id Int?
 
   medicalCondition lnk_ingredient_medical_condition[]
+  filter_question  lnk_ingredient_filter_questions[]
 }
 
 model ingredient_name {
