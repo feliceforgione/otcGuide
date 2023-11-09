@@ -1,15 +1,13 @@
 "use client";
 import { Button, Flex, Text } from "@radix-ui/themes";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { useGuideStore } from "../utils/store";
+import { useInterfaceStore } from "../stores/interfaceStore";
 
 function NavBar() {
-  const router = useRouter();
-  const pathname = usePathname();
-
-  const condition = useGuideStore((state) => state.condition);
+  const diseaseClassName = useInterfaceStore((state) => state.diseaseClassName);
+  const diseaseSubClassName = useInterfaceStore(
+    (state) => state.diseaseSubClassName
+  );
 
   return (
     <nav className="flex justify-between border-b px-2 h-16 items-center">
@@ -21,10 +19,10 @@ function NavBar() {
       </Link>
       <Flex align="center" gap={"1"}>
         <Text size="6" weight="medium">
-          {condition?.diseaseClassName}
+          {diseaseClassName}
         </Text>
-        {condition?.diseaseSubClassName && (
-          <Text size="6">{` : ${condition.diseaseSubClassName}`}</Text>
+        {diseaseSubClassName && (
+          <Text size="6">{` : ${diseaseSubClassName}`}</Text>
         )}
       </Flex>
       <ul>

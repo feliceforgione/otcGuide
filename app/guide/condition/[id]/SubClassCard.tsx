@@ -1,5 +1,5 @@
 "use client";
-import { useGuideStore } from "@/app/utils/store";
+import { useInterfaceStore } from "@/app/stores/interfaceStore";
 import { Card, Heading, Inset, Text } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
 
@@ -12,10 +12,10 @@ interface Props {
 
 function SubClassCard({ id, title, image, description }: Props) {
   const router = useRouter();
-  const { updateCondition } = useGuideStore();
 
   function handleClassClick() {
-    updateCondition({ diseaseSubclassId: id, diseaseSubClassName: title });
+    useInterfaceStore.setState((state) => ({ diseaseSubClassName: title }));
+
     router.push("/guide/medicalhistory");
   }
   return (

@@ -1,13 +1,11 @@
 "use client";
-import { useGuideStore } from "@/app/utils/store";
-import React, { useEffect } from "react";
+import { reset } from "@/app/stores/interfaceStore";
+import { useEffect } from "react";
 
 function Reset() {
-  const { reset } = useGuideStore();
-
   useEffect(() => {
     reset();
-  }, [reset]);
+  }, []);
   return null;
 }
 
