@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["views"]
 }
 
 datasource db {
@@ -152,6 +153,41 @@ model filter_questions {
   reasoning          String @db.VarChar(255)
 
   ingredient lnk_ingredient_filter_questions[]
+}
+
+model symptoms {
+  symptom_id          Int      @id @default(autoincrement()) 
+  symptom_name        String   @db.VarChar(60)
+  symptom_description String?  @db.VarChar(255)
+
+  algorithm_symptom_set algorithm_symptom_set[]
+}
+
+model symptom_types {
+  symptom_type_id          Int      @id @default(autoincrement())
+  symptom_type             String   @db.VarChar(60)
+  symptom_type_description String?  @db.VarChar(250)
+
+  algorithm_symptom_set algorithm_symptom_set[]
+}
+
+model algorithm_symptom_set {
+  algorithm_symptom_set_id Int      @id @default(autoincrement())
+  algorithm_question_id    Int           
+      
+
+  symptom    symptoms @relation(fields: [symptom_id], references: [symptom_id])
+  symptom_id               Int 
+
+  symptom_type    symptom_types? @relation(fields: [symptom_type_id], references: [symptom_type_id])
+  symptom_type_id          Int? 
+}
+
+model algorithm_symptom_combos {
+  algorithm_symptom_combo_id   Int      @id @default(autoincrement()) 
+  algorithm_question_id        Int      
+  combination                  String   @db.VarChar(255)
+  jumpto_algorithm_question_id Int      
 }
 
 model upc {
@@ -430,4 +466,35 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+
+/// Views
+view v_upc_medicalhistory {
+  row_num                       BigInt  @default(0) @db.UnsignedBigInt
+  upc                           String? @db.VarChar(25)
+  ingredient_id                 Int     @default(0)
+  ingredient_name_id            Int     @default(0)
+  ingredient_name               String  @db.VarChar(255)
+  ingredient_broader_name_id    Int?    @default(0)
+  ingredient_broader_name       String? @db.VarChar(255)
+  ingredient_type_id            Int     @default(0)
+  ingredient_hypoallergenic     Int     @default(0) @db.TinyInt
+  medical_condition_id          Int?
+  medical_condition_layman_term String? @db.VarChar(255)
+
+  @@unique(row_num)
+}
+
+
+view v_upc_filterquestions {
+  row_num            BigInt  @default(0) @db.UnsignedBigInt
+  upc                String? @db.VarChar(25)
+  ingredient_id      Int     @default(0)
+  ingredient_name_id Int?    @default(0)
+  ingredient_name    String? @db.VarChar(255)
+  filter_question_id Int?    @default(0)
+  question           String? @db.Text
+
+  @@unique(row_num)
 }
