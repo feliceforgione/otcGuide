@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["views"]
 }
 
@@ -32,6 +32,7 @@ model disease_subclass {
   disease_subclass_disable     Boolean @default(false)
   disease_subclass_overview    String? @db.MediumText
   nonpharm                     String? @db.MediumText
+  image                        String? @db.VarChar(255)
 
   disease_class_id Int
   disease_class    disease_class @relation(fields: [disease_class_id], references: [id])
@@ -156,38 +157,37 @@ model filter_questions {
 }
 
 model symptoms {
-  symptom_id          Int      @id @default(autoincrement()) 
-  symptom_name        String   @db.VarChar(60)
-  symptom_description String?  @db.VarChar(255)
+  symptom_id          Int     @id @default(autoincrement())
+  symptom_name        String  @db.VarChar(60)
+  symptom_description String? @db.VarChar(255)
 
   algorithm_symptom_set algorithm_symptom_set[]
 }
 
 model symptom_types {
-  symptom_type_id          Int      @id @default(autoincrement())
-  symptom_type             String   @db.VarChar(60)
-  symptom_type_description String?  @db.VarChar(250)
+  symptom_type_id          Int     @id @default(autoincrement())
+  symptom_type             String  @db.VarChar(60)
+  symptom_type_description String? @db.VarChar(250)
 
   algorithm_symptom_set algorithm_symptom_set[]
 }
 
 model algorithm_symptom_set {
-  algorithm_symptom_set_id Int      @id @default(autoincrement())
-  algorithm_question_id    Int           
-      
+  algorithm_symptom_set_id Int @id @default(autoincrement())
+  algorithm_question_id    Int
 
   symptom    symptoms @relation(fields: [symptom_id], references: [symptom_id])
-  symptom_id               Int 
+  symptom_id Int
 
   symptom_type    symptom_types? @relation(fields: [symptom_type_id], references: [symptom_type_id])
-  symptom_type_id          Int? 
+  symptom_type_id Int?
 }
 
 model algorithm_symptom_combos {
-  algorithm_symptom_combo_id   Int      @id @default(autoincrement()) 
-  algorithm_question_id        Int      
-  combination                  String   @db.VarChar(255)
-  jumpto_algorithm_question_id Int      
+  algorithm_symptom_combo_id   Int    @id @default(autoincrement())
+  algorithm_question_id        Int
+  combination                  String @db.VarChar(255)
+  jumpto_algorithm_question_id Int
 }
 
 model upc {
@@ -468,7 +468,6 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-
 /// Views
 view v_upc_medicalhistory {
   row_num                       BigInt  @default(0) @db.UnsignedBigInt
@@ -485,7 +484,6 @@ view v_upc_medicalhistory {
 
   @@unique(row_num)
 }
-
 
 view v_upc_filterquestions {
   row_num            BigInt  @default(0) @db.UnsignedBigInt
