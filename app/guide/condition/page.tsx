@@ -4,7 +4,14 @@ import ClassCard from "./ClassCard";
 import Reset from "./Reset";
 
 async function DiseaseClassesSelection() {
-  const diseaseClasses = await prisma.disease_class.findMany();
+  const diseaseClasses = await prisma.disease_class.findMany({
+    where: {
+      show: true,
+    },
+    orderBy: {
+      order: "asc",
+    },
+  });
   return (
     <>
       <Reset />
@@ -18,6 +25,7 @@ async function DiseaseClassesSelection() {
             id={diseaseClass.id}
             title={diseaseClass.aliasname!}
             description={diseaseClass.description!}
+            image={diseaseClass.buttonimage!}
           />
         ))}
       </Grid>
