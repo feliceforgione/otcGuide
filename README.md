@@ -1,34 +1,92 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<div id="top"></div>
 
-## Getting Started
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+<img src="public/otcguide_logo.png" alt="Logo" >
 
-First, run the development server:
+  <h3 align="center">Informing Consumers on their Over-The-Counter Options</h3>
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+  <p align="center"> 
+    <a href="https://youtu.be/XC9IIhvAeLU">View Demo</a>
+    ·
+    <a href="https://github.com/feliceforgione/otcGuide/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/feliceforgione/otcGuide/issues">Request Feature</a>
+  </p>
+</div>
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+<!-- ABOUT THE PROJECT -->
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## About The Project
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+<br>
 
-## Learn More
+### Aids the consumer in choosing appropriate over-the-counter options. With the demands on pharmacists increasing and more stores selling over-the-counter products without a pharmacist on site, consumers are left on their own to choose from the growing number of over-the-counter selections.
 
-To learn more about Next.js, take a look at the following resources:
+<br>
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Built With
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+|                                   |                                                 |                                            |
+| --------------------------------- | :---------------------------------------------: | -----------------------------------------: |
+| [Next.js 13](https://nextjs.org/) |         [Prisma 5](https://prisma.io/)          |            [MySQL](https://www.mysql.com/) |
+| [SWR](https://swr.vercel.app/)    |   [NextAuth.js 4](https://next-auth.js.org/)    |    [TailwindCSS](https://tailwindcss.com/) |
+| [Docker](https://www.docker.com/) | [TypeScript 5](https://www.typescriptlang.org/) | [Zustand 4](https://zustand-demo.pmnd.rs/) |
+|                                   |                                                 |
 
-## Deploy on Vercel
+<br />
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# Features
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- Utilizes disease classes, a brief medical history, and various clinical-based questions to lead the consumer in the
+  right direction
+- Provides guidance about over-the-counter products
+- Informs consumers on non-pharmacologic options
+- Help consumers eliminate the confusion that comes from the vast array of product choices and misleading marketing messages.
+- Detailed information for each over-the-counter product including: large 360-degree panoramic image of the product and enlarged easy-to-read replication of the product label
+
+### Criteria Used
+
+- Medical history - Age, Gender, Pregnancy, Nursing
+- Disease State Contraindications and Ingredient/Product Contraindications
+- Disease tree algorithm based on symptoms and patient current health status
+- Ingredient filter questions
+- Ingredient allergies
+
+<br />
+
+## Roadmap
+
+- [ ] Complete algorithm data
+- [ ] Multi-language Support
+
+<br>
+
+See the [open issues](https://github.com/feliceforgione/otcGuide/issues) for a full list of proposed features (and known issues).
+
+<br>
+
+<!-- CONTRIBUTING -->
+
+## Contributing
+
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
+Don't forget to give the project a star! Thanks again!
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+<br>
+<!-- CONTACT -->
+
+## Contact
+
+Felice Forgione - [@forgione67](https://twitter.com/forgione67)
+
+Project Link: [https://github.com/feliceforgione/otcGuide](https://github.com/feliceforgione/otcGuide)
