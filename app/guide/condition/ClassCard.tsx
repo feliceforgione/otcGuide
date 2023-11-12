@@ -25,7 +25,7 @@ function ClassCard({ id, title, image, description }: Props) {
     >
       <div className="relative overflow-hidden bg-cover bg-no-repeat h-32">
         <Image
-          src={`/images/${image}`}
+          src={`/images/classes/${image}`}
           alt={title}
           fill={true}
           className="object-cover rounded-t-lg min-h-full"

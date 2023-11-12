@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { Container } from "@radix-ui/themes";
 import NavBar from "./NavBar";
 
