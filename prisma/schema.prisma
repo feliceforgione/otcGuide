@@ -89,28 +89,31 @@ enum algorithm_questions_type {
 }
 
 model treatment_plan {
-  treatment_plan_id   Int                @id @default(autoincrement())
+  treatment_plan_id   Int     @id @default(autoincrement())
   disease_subclass_id Int
-  plan_name           String             @default("") @db.VarChar(255)
-  txt_nonpharm        String?            @db.MediumText
-  txt_pharm           String?            @db.MediumText
-  tabs_num            Int                @default(0) @db.SmallInt
-  tab3_label          String?            @db.VarChar(30)
-  tab4_label          String?            @db.VarChar(30)
-  tab5_label          String?            @db.VarChar(30)
-  upcs                lnk_trt_plan_upc[]
+  plan_name           String  @default("") @db.VarChar(255)
+  txt_nonpharm        String? @db.MediumText
+  txt_pharm           String? @db.MediumText
+  tabs_num            Int     @default(0) @db.SmallInt
+  tab3_label          String? @db.VarChar(30)
+  tab4_label          String? @db.VarChar(30)
+  tab5_label          String? @db.VarChar(30)
 
+  upcs             lnk_trt_plan_upc[]
   treatment_advice lnk_trt_plan_advice[]
 }
 
 model lnk_trt_plan_upc {
-  lnk_id         Int    @id @default(autoincrement())
-  upc            String @db.VarChar(25)
-  treatment_line Int    @default(1) @db.SmallInt
-  upc_order      Int?   @db.UnsignedTinyInt
+  lnk_id         Int     @id @default(autoincrement())
+  treatment_line Int     @default(1) @db.SmallInt
+  upc_order      Int?    @db.UnsignedTinyInt
+  disable        Boolean @default(false)
 
   treatment_plan_id Int?
   treatment_plan    treatment_plan? @relation(fields: [treatment_plan_id], references: [treatment_plan_id])
+
+  upc         String? @db.VarChar(25)
+  upc_product upc?    @relation(fields: [upc], references: [upc])
 }
 
 model lnk_trt_plan_advice {
@@ -191,35 +194,32 @@ model algorithm_symptom_combos {
 }
 
 model upc {
-  upc_id Int     @id @default(autoincrement())
-  upc    String  @unique(map: "upc") @db.VarChar(25)
-  asin   String? @db.VarChar(25)
-
-  product_line    String  @db.VarChar(255)
-  item_name       String  @db.VarChar(255)
-  description     String? @db.Text
-  product_details String? @db.TinyText
-
+  upc_id              Int     @id @default(autoincrement())
+  upc                 String  @unique(map: "upc") @db.VarChar(25)
+  asin                String? @db.VarChar(25)
+  product_line        String  @db.VarChar(255)
+  item_name           String  @db.VarChar(255)
+  description         String? @db.Text
+  product_details     String? @db.TinyText
+  main_image          String? @db.VarChar(255)
   upc_label_unit_dose String? @db.VarChar(100)
-
-  size        Float? @db.Float
-  size_uom_id Int?
-  flavor_id   Int?
-
-  other_info    String? @db.MediumText
-  questions     String? @db.MediumText
-  num_of_items  Int?    @db.SmallInt
-  height        Int?    @db.SmallInt
-  height_units  String? @db.VarChar(200)
-  length        Int?    @db.SmallInt
-  length_units  String? @db.VarChar(200)
-  width         Int?    @db.SmallInt
-  width_units   String? @db.VarChar(200)
-  weight        Int?    @db.SmallInt
-  weight_units  String? @db.VarChar(200)
-  bkg_highlight String  @db.VarChar(6)
-  flag_yellow   Int     @default(0) @db.TinyInt
-  flag_red      Int     @default(0) @db.TinyInt
+  size                Float?  @db.Float
+  size_uom_id         Int?
+  flavor_id           Int?
+  other_info          String? @db.MediumText
+  questions           String? @db.MediumText
+  num_of_items        Int?    @db.SmallInt
+  height              Int?    @db.SmallInt
+  height_units        String? @db.VarChar(200)
+  length              Int?    @db.SmallInt
+  length_units        String? @db.VarChar(200)
+  width               Int?    @db.SmallInt
+  width_units         String? @db.VarChar(200)
+  weight              Int?    @db.SmallInt
+  weight_units        String? @db.VarChar(200)
+  bkg_highlight       String  @db.VarChar(6)
+  flag_yellow         Int     @default(0) @db.TinyInt
+  flag_red            Int     @default(0) @db.TinyInt
 
   brand_composition brand_composition[]
   images            images[]
@@ -227,6 +227,7 @@ model upc {
   indications       indications[]
   warnings          warnings[]
   features          features[]
+  treatment_plans   lnk_trt_plan_upc[]
 
   product_type    product_type? @relation(fields: [product_type_id], references: [product_type_id])
   product_type_id Int?
