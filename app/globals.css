@@ -18,21 +18,21 @@ body {
   color: rgb(var(--foreground-rgb));
 }
 
-html {
+#guideMain {
   scrollbar-gutter: stable;
 }
 
-body::-webkit-scrollbar {
+#guideMain::-webkit-scrollbar {
   width: 10px;
 }
 
-body::-webkit-scrollbar-track {
+#guideMain::-webkit-scrollbar-track {
   background: rgba(0, 0, 0, 0);
 }
 
-body::-webkit-scrollbar-thumb {
+#guideMain::-webkit-scrollbar-thumb {
   background-color: #bce4ed;
-  border-radius: 10px;
+  border-radius: 5px;
   border: 2px solid #a6d6e0;
 }
 

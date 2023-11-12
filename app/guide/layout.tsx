@@ -9,7 +9,11 @@ export default function RootLayout({
   return (
     <>
       <NavBar />
-      <main className="p-5">
+      <main
+        id="guideMain"
+        className="p-5 overflow-y-scroll"
+        style={{ height: "calc(100vh - 75px)" }}
+      >
         <Container>{children}</Container>
       </main>
     </>
