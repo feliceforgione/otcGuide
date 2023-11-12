@@ -1,8 +1,9 @@
 "use client";
-import { MedicalHistory, useGuideStore } from "@/app/utils/store";
+import { MedicalHistoryType, useGuideStore } from "@/app/stores/guideStore";
 import { Box, Flex, Heading, RadioGroup, Text } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import ProceedButton from "../_components/ProceedButton";
 
 const GENDERS = [
   { label: "Male", value: "male" },
@@ -30,15 +31,15 @@ const AGEGROUPS = [
 const DEFAULTERRORSTATE = { genderError: false, ageError: false };
 
 function MedicalHistory() {
-  const [gender, setGender] = useState<MedicalHistory["gender"] | "">("");
-  const [ageGroup, setAgeGroup] = useState<MedicalHistory["ageGroup"] | "">("");
+  const [gender, setGender] = useState<MedicalHistoryType["gender"] | "">("");
+  const [ageGroup, setAgeGroup] = useState<MedicalHistoryType["ageGroup"] | "">(
+    ""
+  );
   const [error, setError] = useState(DEFAULTERRORSTATE);
-  const { updateMedicalHistory } = useGuideStore();
 
   const router = useRouter();
 
   function handleProceed() {
-    console.log("proceed clicked");
     setError(DEFAULTERRORSTATE);
     if (!gender) {
       return setError((prevError) => ({ ...prevError, genderError: true }));
@@ -52,10 +53,10 @@ function MedicalHistory() {
     )
       return setError({ ...error, ageError: true });
 
-    updateMedicalHistory({
-      gender,
-      ageGroup,
-    });
+    useGuideStore.setState((state) => ({
+      medicalHistory: { gender, ageGroup },
+    }));
+
     router.push("./exclusion");
   }
 
@@ -67,7 +68,7 @@ function MedicalHistory() {
           <RadioGroup.Root
             size="3"
             name="gender"
-            onValueChange={(e: MedicalHistory["gender"]) => setGender(e)}
+            onValueChange={(e: MedicalHistoryType["gender"]) => setGender(e)}
           >
             <Flex gap="3" direction="column">
               {GENDERS.map((gender) => (
@@ -100,7 +101,9 @@ function MedicalHistory() {
           <RadioGroup.Root
             size="3"
             name="agegroup"
-            onValueChange={(e: MedicalHistory["ageGroup"]) => setAgeGroup(e)}
+            onValueChange={(e: MedicalHistoryType["ageGroup"]) =>
+              setAgeGroup(e)
+            }
           >
             <Flex gap="3" direction="column">
               {AGEGROUPS.map((ageGroup) => (
@@ -131,14 +134,7 @@ function MedicalHistory() {
           </div>
         </Box>
       </Box>
-      <div className="flex justify-center mt-20">
-        <button
-          className="py-2 px-4 rounded-lg bg-blue-700 text-white"
-          onClick={handleProceed}
-        >
-          Proceed
-        </button>
-      </div>
+      <ProceedButton onClickHandle={handleProceed} />
     </div>
   );
 }
