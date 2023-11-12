@@ -1,4 +1,5 @@
 "use client";
+import { SymbolIcon } from "@radix-ui/react-icons";
 import { Button, Flex, Text } from "@radix-ui/themes";
 import Link from "next/link";
 import { useInterfaceStore } from "../stores/interfaceStore";
@@ -10,7 +11,7 @@ function NavBar() {
   );
 
   return (
-    <nav className="flex justify-between border-b px-2 h-16 items-center">
+    <nav className="flex justify-between border-b px-7 h-16 items-center">
       <Link
         href="/"
         className="font-extrabold text-red-950 hover:text-red-800 transition-colors"
@@ -28,7 +29,10 @@ function NavBar() {
       <ul>
         <li>
           <Link href="/guide/condition">
-            <Button className="rounded-full py-4 bg-blue-600">Refresh</Button>
+            <Button className="rounded-full py-4 bg-blue-600">
+              <SymbolIcon />
+              Restart
+            </Button>
           </Link>
         </li>
       </ul>
