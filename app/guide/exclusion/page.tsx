@@ -1,79 +1,99 @@
 "use client";
-import { useGuideStore } from "@/app/utils/store";
-import { exclusion_questions } from "@prisma/client";
-import { Box, Checkbox, Flex, Heading, Text } from "@radix-ui/themes";
-import { useRef, useState } from "react";
-import useSWR from "swr";
-
-import { getExclusionQuestions } from "@/app/utils/api";
+import { MedicalHistoryType, useGuideStore } from "@/app/stores/guideStore";
+import { getAlgorithmStart, getExclusionQuestions } from "@/app/utils/api";
+import { getAgeGenderGroup } from "@/app/utils/utilities";
+import { exclusion_questions, lnk_mh_algorithm_ques } from "@prisma/client";
+import { Heading } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
+import useSWR from "swr";
+import CheckboxStatementList from "../_components/CheckboxStatementList";
+import Loading from "../_components/Loading";
+import Redirect from "../_components/Redirect";
 
 function Exclusion() {
-  const [noneBoxChecked, setNoneBoxChecked] = useState(false);
-  const { condition } = useGuideStore();
-  const form = useRef(null);
   const router = useRouter();
+  const diseaseSubclassId = useGuideStore.getState().diseaseSubclassId;
 
-  const { isLoading, data: questions } = useSWR<exclusion_questions[] | null>(
-    "disease-classes/${condition?.diseaseSubclassId}/exclusions",
-    () => getExclusionQuestions(condition!.diseaseSubclassId!)
+  const { isLoading: isLoadingQuestions, data: questions } = useSWR<
+    exclusion_questions[] | null
+  >(`disease-classes/${diseaseSubclassId}/exclusions`, () =>
+    getExclusionQuestions(diseaseSubclassId!)
   );
 
-  function handleSubmit(e: React.SyntheticEvent) {
-    e.preventDefault();
-    const data = new FormData(form.current!);
-    if (data.get("questions")) {
-      return router.push("/guide/consult-professional");
+  const { isLoading: isLoadingstartingPoints, data: startingPoints } =
+    useSWR<lnk_mh_algorithm_ques | null | null>(
+      `disease-classes/${diseaseSubclassId}/startingpoints`,
+      () => getAlgorithmStart(diseaseSubclassId!)
+    );
+
+  if (isLoadingQuestions || isLoadingstartingPoints) return <Loading />;
+
+  const { gender, ageGroup } = useGuideStore.getState().medicalHistory!;
+  console.log("Starting Points : ", startingPoints);
+
+  if (!startingPoints) {
+    console.log("No starting pointS");
+    return (
+      <Redirect
+        link={"/guide/consult-professional?error=2"}
+        redirect={true}
+        replaceMethod="replace"
+      />
+    );
+  }
+
+  const ageGenderGroup: MedicalHistoryType["ageGenderGroup"] =
+    getAgeGenderGroup({ gender, ageGroup })!;
+
+  useGuideStore.setState((state) => ({
+    medicalHistory: {
+      ...state.medicalHistory!,
+      ageGenderGroup: ageGenderGroup,
+    },
+  }));
+  const startingPoint = startingPoints![ageGenderGroup];
+
+  console.log("Starting Point :", startingPoint);
+
+  if (!startingPoint) {
+    console.log("No starting point!");
+    return (
+      <Redirect
+        link={"/guide/consult-professional?error=2"}
+        redirect={true}
+        replaceMethod="replace"
+      />
+    );
+  }
+  if (!questions || questions?.length === 0) {
+    console.log("No exclusion questions");
+    return (
+      <Redirect
+        link={`/guide/algorithm/${startingPoint}`}
+        redirect={true}
+        replaceMethod="replace"
+      />
+    );
+  }
+
+  function handleSubmit(selectedValues: string[]) {
+    if (selectedValues.length > 0) {
+      router.push("/guide/consult-professional?error=1");
+    } else {
+      router.push(`/guide/algorithm/${startingPoint}`);
     }
   }
 
-  if (isLoading) return null;
   return (
     <>
       <Heading className="pageHeading">Please answer the following: </Heading>
-      <Box className="border-2 border-slate-500 rounded-md p-8">
-        <form ref={form} onSubmit={handleSubmit}>
-          <Flex gap="3" direction="column">
-            {questions?.map((question) => (
-              <Box key={question.question_id} className="">
-                <Text as="label" size="7">
-                  <Flex gap="2">
-                    <Checkbox
-                      size="3"
-                      name="questions"
-                      value={String(question.question_id)}
-                      disabled={noneBoxChecked}
-                      checked={noneBoxChecked ? false : undefined}
-                    />
-                    {question.question}
-                  </Flex>
-                </Text>
-              </Box>
-            ))}
-            <Box className="">
-              <Text as="label" size="7">
-                <Flex gap="2">
-                  <Checkbox
-                    value="none"
-                    name="none"
-                    onCheckedChange={() => setNoneBoxChecked(!noneBoxChecked)}
-                  />
-                  None of the above
-                </Flex>
-              </Text>
-            </Box>
-          </Flex>
-
-          <div className="flex justify-center mt-20">
-            <button
-              className="py-2 px-4 rounded-lg bg-blue-700 text-white"
-              type="submit"
-            >
-              Proceed
-            </button>
-          </div>
-        </form>
-      </Box>
+      <CheckboxStatementList
+        handleSubmit={handleSubmit}
+        statements={questions.map((q) => ({
+          id: q.question_id,
+          itemValue: q.question,
+        }))}
+      />
     </>
   );
 }
